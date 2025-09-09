@@ -1,15 +1,15 @@
 import type { ConfigFile } from '@rtk-query/codegen-openapi'
 
 const config: ConfigFile = {
-  schemaFile: '../ApiService/Todos.Api.json',
+  schemaFile: '../ApiService/BlogPosts.Api.json',
   apiFile: './src/store/api/empty-api.ts',
   apiImport: 'emptySplitApi',
   outputFiles: {
-    './src/store/api/generated/todos.ts': {
-      filterEndpoints: [/Todo/]
+    './src/store/api/generated/blogPosts.ts': {
+      // filterEndpoints: [/BlogPosts/]
     },
   },
-  exportName: 'todosApi',
+  exportName: 'blogPostsApi',
   hooks: true,
 }
 

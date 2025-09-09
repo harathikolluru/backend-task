@@ -38,13 +38,13 @@
     </ItemGroup>
     <!-- Check for requirements.txt and install dependencies -->
     <Message Importance="Normal" Text="Checking for and installing Python dependencies for %(RequirementsTxtFiles.RelativeDir)" Condition="Exists('%(RequirementsTxtFiles.FullPath)')" />
-    <Exec Command="python -m venv .venv" WorkingDirectory="%(RequirementsTxtFiles.RootDir)%(RequirementsTxtFiles.Directory)" Condition="!Exists('%(RequirementsTxtFiles.RootDir)%(RequirementsTxtFiles.Directory)/.venv')" />
+    <!--<Exec Command="python -m venv .venv" WorkingDirectory="%(RequirementsTxtFiles.RootDir)%(RequirementsTxtFiles.Directory)" Condition="!Exists('%(RequirementsTxtFiles.RootDir)%(RequirementsTxtFiles.Directory)/.venv')" />-->
     <!-- Determine the correct pip path based on folder structure -->
     <PropertyGroup>
       <PipPath Condition="Exists('%(RequirementsTxtFiles.RootDir)%(RequirementsTxtFiles.Directory).venv/Scripts')">%(RequirementsTxtFiles.RootDir)%(RequirementsTxtFiles.Directory).venv/Scripts/pip</PipPath>
       <PipPath Condition="Exists('%(RequirementsTxtFiles.RootDir)%(RequirementsTxtFiles.Directory).venv/bin')">%(RequirementsTxtFiles.RootDir)%(RequirementsTxtFiles.Directory).venv/bin/pip</PipPath>
     </PropertyGroup>
     <!-- Use the absolute pip path to install dependencies -->
-    <Exec Command="$(PipPath) install -r %(RequirementsTxtFiles.FullPath)" WorkingDirectory="%(RequirementsTxtFiles.RootDir)%(RequirementsTxtFiles.Directory)" />
+    <!--<Exec Command="$(PipPath) install -r %(RequirementsTxtFiles.FullPath)" WorkingDirectory="%(RequirementsTxtFiles.RootDir)%(RequirementsTxtFiles.Directory)" />-->
   </Target>
 </Project>

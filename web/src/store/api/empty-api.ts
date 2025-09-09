@@ -10,6 +10,7 @@ export const emptySplitApi = createApi({
     },
   }),
   endpoints: () => ({}),
+  tagTypes: ['BlogPosts']
 })
 
 export const { reducer, reducerPath } = emptySplitApi;
