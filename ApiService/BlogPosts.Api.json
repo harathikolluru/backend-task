@@ -2,7 +2,7 @@
   "x-generator": "NSwag v14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))",
   "openapi": "3.0.0",
   "info": {
-    "title": "Todos API",
+    "title": "BlogPost API",
     "version": "v1"
   },
   "servers": [
@@ -11,12 +11,32 @@
     }
   ],
   "paths": {
-    "/api/Todos": {
+    "/api/BlogPosts": {
       "get": {
         "tags": [
-          "Todos"
+          "BlogPosts"
         ],
-        "operationId": "GetTodos",
+        "operationId": "GetBlogPosts",
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 1
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -25,7 +45,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TodoItem"
+                    "$ref": "#/components/schemas/BlogPostDto"
                   }
                 }
               }
@@ -35,15 +55,15 @@
       },
       "post": {
         "tags": [
-          "Todos"
+          "BlogPosts"
         ],
-        "operationId": "CreateTodo",
+        "operationId": "CreateBlogPost",
         "requestBody": {
-          "x-name": "command",
+          "x-name": "dto",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTodoCommand"
+                "$ref": "#/components/schemas/CreateBlogPostDto"
               }
             }
           },
@@ -65,12 +85,43 @@
         }
       }
     },
-    "/api/Todos/{id}": {
+    "/api/BlogPosts/{slug}": {
+      "get": {
+        "tags": [
+          "BlogPosts"
+        ],
+        "operationId": "GetBlogPostBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlogPostDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/BlogPosts/{id}": {
       "put": {
         "tags": [
-          "Todos"
+          "BlogPosts"
         ],
-        "operationId": "UpdateTodo",
+        "operationId": "UpdateBlogPost",
         "parameters": [
           {
             "name": "id",
@@ -88,7 +139,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateTodoCommandDto"
+                "$ref": "#/components/schemas/UpdateBlogPostDto"
               }
             }
           },
@@ -111,9 +162,9 @@
       },
       "delete": {
         "tags": [
-          "Todos"
+          "BlogPosts"
         ],
-        "operationId": "DeleteTodo",
+        "operationId": "DeleteBlogPost",
         "parameters": [
           {
             "name": "id",
@@ -140,44 +191,11 @@
           }
         }
       }
-    },
-    "/api/Todos/classify": {
-      "post": {
-        "tags": [
-          "Todos"
-        ],
-        "operationId": "ClassifyTodo",
-        "requestBody": {
-          "x-name": "request",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ClassifyTodoRequest"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/octet-stream": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
     "schemas": {
-      "TodoItem": {
+      "BlogPostDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -186,45 +204,74 @@
             "format": "int32"
           },
           "title": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "coverImageUrl": {
             "type": "string",
             "nullable": true
           },
-          "category": {
+          "createdAt": {
             "type": "string",
-            "nullable": true
-          },
-          "isComplete": {
-            "type": "boolean"
+            "format": "date-time"
           }
         }
       },
-      "CreateTodoCommand": {
+      "CreateBlogPostDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "title": {
             "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "coverImageUrl": {
+            "type": "string",
+            "nullable": true
           }
         }
       },
-      "UpdateTodoCommandDto": {
+      "UpdateBlogPostDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "title": {
             "type": "string"
           },
-          "isComplete": {
-            "type": "boolean"
-          }
-        }
-      },
-      "ClassifyTodoRequest": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "description": {
+          "content": {
             "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "coverImageUrl": {
+            "type": "string",
+            "nullable": true
           }
         }
       }
