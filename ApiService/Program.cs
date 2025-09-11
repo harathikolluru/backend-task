@@ -31,8 +31,7 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddEndpointsApiExplorer();
 
 // Add database context
-builder.Services.AddDbContext<BlogDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("blogdb")));
+builder.AddSqlServerDbContext<BlogDbContext>("blogdb");
 
 // Handlers (CQRS)
 builder.Services.AddScoped<CreateBlogPostHandler>();
@@ -67,40 +66,6 @@ app.UseCors(static builder =>
            .WithExposedHeaders("*");
 });
 app.MapDefaultEndpoints();
-
-
-// Auto-migrate & seed
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<BlogDbContext>();
-    db.Database.Migrate();
-
-    if (!db.BlogPosts.Any())
-    {
-        db.BlogPosts.AddRange(
-        new BlogPost
-        {
-            Title = "React Patterns",
-            Slug = "react-patterns",
-            Content = "Learn advanced patterns for building React apps.",
-            Tags = new List<string> { "react", "patterns", "frontend" },
-            CoverImageUrl = "https://example.com/images/react-patterns.png",
-            CreatedAt = DateTime.UtcNow
-        },
-        new BlogPost
-        {
-            Title = "TypeScript Tips",
-            Slug = "typescript-tips",
-            Content = "Boost your productivity with TypeScript tips.",
-            Tags = new List<string> { "typescript", "tips", "javascript" },
-            CoverImageUrl = "https://example.com/images/typescript-tips.png",
-            CreatedAt = DateTime.UtcNow
-        }
-    );
-        db.SaveChanges();
-    }
-    db.SaveChanges();
-}
 app.UseOpenApi();
 app.UseSwaggerUi();
 app.MapControllers();
