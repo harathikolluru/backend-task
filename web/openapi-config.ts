@@ -6,7 +6,7 @@ const config: ConfigFile = {
   apiImport: 'emptySplitApi',
   outputFiles: {
     './src/store/api/generated/blogPosts.ts': {
-      // filterEndpoints: [/BlogPosts/]
+      filterEndpoints: [/BlogPost/]
     },
   },
   exportName: 'blogPostsApi',
